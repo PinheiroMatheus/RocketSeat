@@ -10,7 +10,6 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
 export function Home() {
     const [toDoList, setToDoList] = useState<string[]>([])
     const [toDoListComponent, setToDoListComponent] = useState('')
-    // const [toDoListComplete, toDoListComplete] = useState<string[]>([])
 
     function handleToDoListAdd() {
         if (toDoList.includes(toDoListComponent)) {

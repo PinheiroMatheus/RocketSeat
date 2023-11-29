@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
         padding: 16,
         flex: 1,
         borderRadius: 6,
-        color: '#F2F2F2'
+        color: '#F2F2F2',
     },
     buttonAdd: {
         backgroundColor: '#1E6F9F',
