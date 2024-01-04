@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+
+import { groupsGetAll } from '@storage/groupsGetAll';
 
 import { Header } from '@components/Header';
 import { Highlight } from '@components/Highlight';
@@ -20,6 +22,20 @@ export function Groups() {
   function handleNewGroup() {
     navigation.navigate('new');
   }
+
+  async function fetchGroups() {
+    try {
+      const data = await groupsGetAll();
+      setGroups(data)
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
+  useFocusEffect(useCallback(() => {
+    fetchGroups();
+  },[groups]));
 
   return (
     <Container>
@@ -46,7 +62,7 @@ export function Groups() {
         )}
       />
 
-      <Button 
+      <Button
         title='Criar nova turma'
         onPress={handleNewGroup}
       />
