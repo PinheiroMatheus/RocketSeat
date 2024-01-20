@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { FlatList } from 'react-native';
 
+import { AppError } from '@utils/AppError';
+
+import { playerAddByGroup } from '@storage/player/playerAddByGroup';
+import { playersGetByGroupAndTeam } from '@storage/player/playersGetByGroupAndTeam';
+
 import { Input } from '@components/Input';
 import { Filter } from '@components/Filter';
 import { Header } from '@components/Header';
@@ -13,9 +18,7 @@ import { Button } from '@components/Button';
 import { Alert } from 'react-native';
 
 import { Container, Form, HeaderList, NumberOfPlayers } from './styles';
-import { AppError } from '@utils/AppError';
-import { playerAddByGroup } from '@storage/player/playerAddByGroup';
-import { playersGetByGroup } from '@storage/player/playersGetByGroup';
+import { PlayerStorageDTO } from '@storage/player/PlayerStorageDTO';
 
 type RouteParams = {
     group: string;
@@ -24,7 +27,7 @@ type RouteParams = {
 export function Players() {
     const [newPlayerName, setNewPlayerName] = useState('');
     const [team, setTeam] = useState('Time A');
-    const [players, setPlayers] = useState(['Matheus', 'Teste']);
+    const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
 
     const route = useRoute();
     const { group } = route.params as RouteParams;
@@ -40,10 +43,7 @@ export function Players() {
         }
 
         try {
-            await playerAddByGroup(newPlayer, group);
-            const players =  await playersGetByGroup(group);
-            console.log(players);
-            
+            await playerAddByGroup(newPlayer, group);            
         } catch (error) {
             if(error instanceof AppError) {
                 Alert.alert('Nova pessoa', error.message);
@@ -51,6 +51,16 @@ export function Players() {
                 console.log(error);
                 Alert.alert('Nova pessoa', 'Não foi possível adicionar');
             }
+        }
+    }
+
+    async function fetchPlayersByTeam() {
+        try {
+            const playersByTeam = await playersGetByGroupAndTeam(group, team);
+            setPlayers(playersByTeam)
+        } catch(error) {
+            console.log(error);
+            Alert.alert('Pessoas', 'Não foi possivel carregar as pessoas do time selecionado')
         }
     }
 
