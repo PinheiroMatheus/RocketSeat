@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
-import { groupsGetAll } from '@storage/groupsGetAll';
+import { groupsGetAll } from '@storage/group/groupsGetAll';
 
 import { Header } from '@components/Header';
 import { Highlight } from '@components/Highlight';
